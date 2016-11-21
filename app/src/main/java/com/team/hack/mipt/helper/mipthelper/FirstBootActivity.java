@@ -1,0 +1,76 @@
+package com.team.hack.mipt.helper.mipthelper;
+
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+
+import com.team.hack.mipt.helper.mipthelper.helper.GetLaborotories;
+import com.team.hack.mipt.helper.mipthelper.helper.Values;
+
+public class FirstBootActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_first_boot);
+
+    }
+
+    public void onContinueClick(View v) {
+        String name = ((EditText) findViewById(R.id.name_edit_text)).getText().toString();
+        String group = ((EditText) findViewById(R.id.group_edit_text)).getText().toString();
+        String semester = ((EditText) findViewById(R.id.sem_edit_text)).getText().toString();
+        int iSem;
+        if (!name.equals("") && checkGroup(group) && ((iSem = checkSemester(semester)) != 0)) {
+            SharedPreferences.Editor spe = getSharedPreferences(Values.configSettings, 0).edit();
+            spe.putString(Values.name, name);
+            spe.putString(Values.group, group);
+            spe.putInt(Values.semester, iSem);
+            spe.apply();
+
+            Intent intent = new Intent(this, GetLaborotories.class);
+            intent.putExtra(Values.semesterNumber, iSem);
+            startService(intent);
+
+            BroadcastReceiver br = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    this.abortBroadcast();
+                    Intent sh_intent = new Intent(context, FirstLoadActivity.class);
+                    sh_intent.putExtra(Values.listOfLabs, intent.getCharSequenceArrayExtra(Values.listOfLabs));
+                    startActivity(sh_intent);
+                }
+            };
+            registerReceiver(br, new IntentFilter(Values.intentGetLabs));
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(R.string.dialog_ask_to_complete_gap)
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                        }
+                    });
+            builder.create().show();
+        }
+    }
+
+    private boolean checkGroup(String group) {
+        return true;
+    }
+
+    private int checkSemester(String sem) {
+        try {
+            return Integer.parseInt(sem);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
+}

@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">MIPT helper</string>
+    <string name="make_registration_label">Пройдите регистрацию:</string>
+    <string name="name_label">Имя:</string>
+    <string name="group_label">Группа:</string>
+    <string name="semester_label">Семестр:</string>
+    <string name="continue_button">Далее</string>
+    <string name="dialog_ask_to_complete_gap">Пожалуйста заполните корректно все поля</string>
+    <string name="ok">Хорошо</string>
+    <string name="description">Описание</string>
+    <string name="main_questions">Контрольные вопросы</string>
+    <string name="literature">Литература</string>
+    <string name="english">Английский</string>
+    <string name="geometry">Аналитическая геометрия</string>
+    <string name="physics">Физика</string>
+    <string name="informatic">Информатика</string>
+    <string name="laborotories">Лабороторные работы</string>
+    <string name="settings">Настройки</string>
+    <string name="download_lab_menu">Загрузить лабу</string>
+    <string name="settings_menu">Настройки</string>
+    <string name="main_menu_menu">Главное меню</string>
+
+    <string name="qs_4_8_3"></string>
+</resources>

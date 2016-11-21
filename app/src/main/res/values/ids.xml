@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="image_id" type="id"/>
+    <item name="layout_of_image_id" type="id"/>
+    <item name="dop_id" type="id"/>
+    <item name="local_text" type="id"/>
+</resources>

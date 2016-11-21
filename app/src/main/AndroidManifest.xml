@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.team.hack.mipt.helper.mipthelper">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".FirstBootActivity" />
+
+        <service
+            android:name=".helper.GetLaborotories"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name=".FirstLoadActivity" />
+        <activity android:name=".ListOfLabsActivity" />
+
+        <service
+            android:name=".helper.GetLabsFromSDService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name=".ShowLaborotorActivity" />
+
+        <service
+            android:name=".helper.ServiceOfLab"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name=".DescriptionActivity" />
+        <activity android:name=".SpecialQsActivity" />
+        <activity android:name=".LiteratureActivity"></activity>
+    </application>
+
+</manifest>
