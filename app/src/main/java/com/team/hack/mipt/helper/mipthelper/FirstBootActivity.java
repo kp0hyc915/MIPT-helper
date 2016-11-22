@@ -21,7 +21,6 @@ public class FirstBootActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_boot);
-
     }
 
     public void onContinueClick(View v) {
@@ -30,47 +29,53 @@ public class FirstBootActivity extends AppCompatActivity {
         String semester = ((EditText) findViewById(R.id.sem_edit_text)).getText().toString();
         int iSem;
         if (!name.equals("") && checkGroup(group) && ((iSem = checkSemester(semester)) != 0)) {
-            SharedPreferences.Editor spe = getSharedPreferences(Values.configSettings, 0).edit();
+            SharedPreferences.Editor spe = getSharedPreferences(Values.aboutUserPath, 0).edit();
             spe.putString(Values.name, name);
             spe.putString(Values.group, group);
             spe.putInt(Values.semester, iSem);
             spe.apply();
 
             Intent intent = new Intent(this, GetLaborotories.class);
-            intent.putExtra(Values.semesterNumber, iSem);
+            intent.setAction(Values.get_labs_for_semester);
             startService(intent);
 
-            BroadcastReceiver br = new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    this.abortBroadcast();
-                    Intent sh_intent = new Intent(context, FirstLoadActivity.class);
-                    sh_intent.putExtra(Values.listOfLabs, intent.getCharSequenceArrayExtra(Values.listOfLabs));
-                    startActivity(sh_intent);
-                }
-            };
+            BroadcastReceiver br = new GetterLabsForSemester();
             registerReceiver(br, new IntentFilter(Values.intentGetLabs));
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage(R.string.dialog_ask_to_complete_gap)
                     .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-
                         }
                     });
             builder.create().show();
         }
     }
-
+//TODO make the checking of group
     private boolean checkGroup(String group) {
         return true;
     }
 
     private int checkSemester(String sem) {
         try {
-            return Integer.parseInt(sem);
+            int i =  Integer.parseInt(sem);
+            if (i >= 0 && i <= 6)
+                return i;
+            else
+                return 0;
         } catch (NumberFormatException e) {
             return 0;
+        }
+    }
+
+    class GetterLabsForSemester extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            unregisterReceiver(this);
+            Intent sh_intent = new Intent(context, FirstLoadActivity.class);
+            sh_intent.putExtra(Values.listOfLabs, intent.getCharSequenceArrayExtra(Values.listOfLabs));
+            startActivity(sh_intent);
         }
     }
 }

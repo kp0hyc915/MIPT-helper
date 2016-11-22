@@ -29,6 +29,8 @@ import static android.R.attr.id;
 /**
  * Created by semyon on 19.11.16.
  */
+
+//TODO remake this class
 public class GetLaborotories extends Service {
 
     String recivemessage = new String();
@@ -254,20 +256,13 @@ public class GetLaborotories extends Service {
 
                     }
                 } catch (UnknownHostException e) {
-// TODO Auto-generated catch block
                     e.printStackTrace();
-                    nSem = "UnknownHostException: " + e.toString();
                 } catch (IOException e) {
-// TODO Auto-generated catch block
-                    e.printStackTrace();
-                    nSem = "IOException: " + e.toString();
                 } finally {
                     if (socket != null) {
                         try {
                             socket.close();
                         } catch (IOException e) {
-// TODO Auto-generated catch block
-                            e.printStackTrace();
                         }
                     }
                 }
