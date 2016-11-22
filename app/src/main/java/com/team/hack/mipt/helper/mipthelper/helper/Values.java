@@ -18,7 +18,9 @@ public final class Values {
     public final static String actionDownloadProgress = "COM.MIPT.GET_DOWNLOAD_PROGRESS";
     public final static String showOneLab = "COM.MIPT.SHOW_ONE_LAB";
     public final static String get_labs_for_semester = "COM.MIPT.GET_LABS_FOR_SEMESTER";
+    public final static String downloadLabsAction = "COM.MIPT.DOWNLOAD_LABS";
 
+    public final static String nameOfLabs = "name_of_labs";
     public final static String firstBootPath = "is_first_boot";
     public final static String idPref = "id_pref";
     public final static String currentLaba = "current_laba";

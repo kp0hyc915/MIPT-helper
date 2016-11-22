@@ -1,10 +1,13 @@
 package com.team.hack.mipt.helper.mipthelper;
 
 import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -23,6 +26,8 @@ import java.util.Vector;
 
 public class FirstLoadActivity extends AppCompatActivity {
 
+    private Context context = this;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,10 +35,29 @@ public class FirstLoadActivity extends AppCompatActivity {
 
         CharSequence[] labs = getIntent().getExtras().getCharSequenceArray(Values.listOfLabs);
         LinearLayout layout = (LinearLayout) findViewById(R.id.first_load_layout);
-        for(int i = 0; i < labs.length; ++i) {
+        //TODO here we should make design
+        if (labs == null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(R.string.we_havent_labs);
+            builder.setTitle(R.string.sorry);
+            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                        }
+                    });
+            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialogInterface) {
+                    Intent intent = new Intent(context, MainActivity.class);
+                    startActivity(intent);
+                }
+            });
+            builder.create().show();
+        }
+        for (CharSequence lab : labs) {
             ImageView iv = new ImageView(this);
             iv.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ok));
-            iv.setId(R.id.image_id);
+            iv.setId(R.id.local_image_id);
             RelativeLayout.LayoutParams params = new RelativeLayout.
                     LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             params.addRule(RelativeLayout.CENTER_VERTICAL);
@@ -41,12 +65,12 @@ public class FirstLoadActivity extends AppCompatActivity {
 
             TextView tv = new TextView(this);
             tv.setId(R.id.local_text);
-            tv.setText(labs[i]);
+            tv.setText(lab);
             params = new RelativeLayout.
                     LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             params.addRule(RelativeLayout.CENTER_VERTICAL);
             params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            params.addRule(RelativeLayout.RIGHT_OF, R.id.image_id);
+            params.addRule(RelativeLayout.RIGHT_OF, R.id.local_image_id);
             params.leftMargin = 10;
             tv.setLayoutParams(params);
 
@@ -65,11 +89,11 @@ public class FirstLoadActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     if (view.getTag().equals(false)) {
-                        ImageView iv = (ImageView) view.findViewById(R.id.image_id);
+                        ImageView iv = (ImageView) view.findViewById(R.id.local_image_id);
                         iv.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ok));
                         view.setTag(true);
                     } else {
-                        ImageView iv = (ImageView) view.findViewById(R.id.image_id);
+                        ImageView iv = (ImageView) view.findViewById(R.id.local_image_id);
                         iv.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.red_circle));
                         view.setTag(false);
                     }
@@ -94,7 +118,7 @@ public class FirstLoadActivity extends AppCompatActivity {
         };
         registerReceiver(br, new IntentFilter(Values.actionDownloadProgress));*/
         LinearLayout layout = (LinearLayout) findViewById(R.id.first_load_layout);
-        Vector<String> vector = new Vector();
+        Vector<String> vector = new Vector<>();
         for (int i = 0; i < layout.getChildCount(); ++i) {
             RelativeLayout v = (RelativeLayout) layout.getChildAt(i);
             if (v.getTag().equals(true)) {
@@ -105,14 +129,16 @@ public class FirstLoadActivity extends AppCompatActivity {
         String[] str = new String[vector.size()];
         vector.copyInto(str);
         Intent intent = new Intent(this, GetLaborotories.class);
-        intent.putExtra("name_lab_load", str);
+        intent.setAction(Values.downloadLabsAction);
+        intent.putExtra(Values.nameOfLabs, str);
+        //TODO should be deleted when server will work
         //startService(intent);
+        String str2 = "";
+        for (String aStr : str) {
+            str2 += (aStr + "/");
+        }
         SharedPreferences.Editor spe = getSharedPreferences(Values.configSettings, 0).edit();
         spe.putBoolean(Values.firstBootPath, false);
-        String str2 = "";
-        for (int i = 0; i < str.length; ++i) {
-            str2 += (str[i] + "/");
-        }
         spe.putString("dowloadedLabs", str2);
         spe.apply();
         startActivity(new Intent(this, MainActivity.class));

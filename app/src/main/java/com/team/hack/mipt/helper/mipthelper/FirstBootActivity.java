@@ -40,12 +40,14 @@ public class FirstBootActivity extends AppCompatActivity {
             startService(intent);
 
             BroadcastReceiver br = new GetterLabsForSemester();
-            registerReceiver(br, new IntentFilter(Values.intentGetLabs));
+            registerReceiver(br, new IntentFilter(Values.get_labs_for_semester));
         } else {
+            //TODO here we should make design
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage(R.string.dialog_ask_to_complete_gap)
                     .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
                         }
                     });
             builder.create().show();

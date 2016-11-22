@@ -19,6 +19,8 @@
     <string name="download_lab_menu">Загрузить лабу</string>
     <string name="settings_menu">Настройки</string>
     <string name="main_menu_menu">Главное меню</string>
+    <string name="we_havent_labs">Простите, но у нас пока нет лабороторок для вашей группы, но мы в процессе :)</string>
+    <string name="sorry">Упс, просим прощения</string>
 
     <string name="qs_4_8_3"></string>
 </resources>

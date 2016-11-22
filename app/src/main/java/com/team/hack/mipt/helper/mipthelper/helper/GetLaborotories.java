@@ -47,6 +47,23 @@ public class GetLaborotories extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        //TODO I made it only for time, while I don't sure in server.
+        int sem = getSharedPreferences(Values.aboutUserPath, 0).getInt(Values.semester, -1);
+        if (sem != -1) {
+            intent = new Intent();
+            intent.setAction(Values.get_labs_for_semester);
+            String[] str = new String[5];
+            str[0] = "111";
+            str[1] = "222";
+            str[3] = "333";
+            str[2] = "444";
+            str[4] = "555";
+            intent.putExtra(Values.listOfLabs, str);
+            sendBroadcast(intent);
+            stopSelf();
+            return super.onStartCommand(intent, flags, startId);
+        }
+
         MyRun myRun = new MyRun(intent, this);
         myRun.run();
         return super.onStartCommand(intent, flags, startId);
@@ -113,7 +130,7 @@ public class GetLaborotories extends Service {
 
 
         public void run() {
-            int sem = mainIntent.getIntExtra(Values.semesterNumber, -1);
+            int sem = getSharedPreferences(Values.aboutUserPath, 0).getInt(Values.semester, -1);
 
             if(sem == -1){
                 String str1[] = mainIntent.getStringArrayExtra("name_lab_load");
